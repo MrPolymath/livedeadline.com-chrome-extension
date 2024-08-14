@@ -21,6 +21,7 @@
     "react-datepicker": "^4.8.0",
     "react-dom": "^17.0.2",
     "react-hot-loader": "^4.13.1",
+    "react-tailwindcss-datepicker": "^1.6.6",
     "use-chrome-storage": "^1.0.8"
   },
   "devDependencies": {
