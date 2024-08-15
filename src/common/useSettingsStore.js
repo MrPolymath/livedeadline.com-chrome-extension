@@ -1,12 +1,14 @@
-import { createChromeStorageStateHookLocal } from 'use-chrome-storage';
+import { createChromeStorageStateHookLocal } from "use-chrome-storage";
 
-const SETTINGS_KEY = 'settings';
+const SETTINGS_KEY = "settings";
 const INITIAL_VALUE = {
-  activePage: 'countdown',
-  // countdown settings
-  countdownDate: new Date().toString(),
-  countdownText: 'Countdown placeholder text',
-  // pizza settings
+  countdownText: "Custom Countdown",
+  countdownEndTime: Date.now() + 1000 * 60 * 60 * 24 * 6,
+  backgroundColor: "#F6F6EF",
+  daysColor: "#f0652f",
+  decimalsColor: "#fda942",
+  daysTextColor: "#000000",
+  deadlineTextColor: "#108AD2",
 };
 
 export const useSettingsStore = createChromeStorageStateHookLocal(
