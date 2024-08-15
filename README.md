@@ -1,29 +1,26 @@
-Started from: https://github.com/lxieyang/chrome-extension-boilerplate-react
+## Why
 
-## Installing and Running
+To remind yourself during your daily browsing of how fast time goes. I promise that if you set deadlines for yourself and use this as your new tab, you will work harder.
 
-### Procedures:
+Disclaimer: You might also end up more stressed.
 
-1. Check if your [Node.js](https://nodejs.org/) version is >= **14**.
-2. Clone this repository.
-3. Change the package's `name`, `description`, and `repository` fields in `package.json`.
-4. Change the name of your extension on `src/manifest.json`.
-5. Run `npm install` to install the dependencies.
-6. Run `npm start`
-7. Load your extension on Chrome following:
-   1. Access `chrome://extensions/`
-   2. Check `Developer mode`
-   3. Click on `Load unpacked extension`
-   4. Select the `build` folder.
-8. Happy hacking.
+This is inspired by [Y Combinator](https://www.ycombinator.com/). During the batch, they constantly remind you of how many days there is until demo day, YCs most important deadline. They even show it to you in their internal Chrome Extension! I thought that the New Tab thing was a nice little trick, and wanted to use it for myself. I built a similar version to this one for myself a couple years ago, but now decided it would be nice to build it a little bit more customizable and share it with the world.
 
-## Packing
+## Installing the extension
 
-After the development of your extension run the command
+- Clone this repository or just download the build folder
+- Click the extension icon in Google Chrome
+- Click on "Manage Extensions"
+- Enable "Developer Mode" on the top right
+- Click "Load Unpacked" from the top left
+- Upload the build folder
 
-```
-$ NODE_ENV=production npm run build
-```
+## About the author
 
-Now, the content of `build` folder will be the extension ready to be submitted to the Chrome Web Store. Just take a look at the [official guide](https://developer.chrome.com/webstore/publish) to more infos about publishing.
-# livedeadline.com-chrome-extension
+Hi, I'm [Dani](https://www.linkedin.com/in/danielcarmonaserrat/). Aerospace engineer, founder or [Rapidand](https://rapidand.com) (Amazon of the country of Andorra) and [Aldara YC S22](https://aldara.com) (Modern version of an HOA manager).
+
+## Alternatives
+
+You don't want to replace the New Tab, but you like the idea of having a website with the countdown? I built a web version of it. I thought it makes sense if you want to display some countdown in your office.
+
+[livedeadline.com](https://www.livedeadline.com)
