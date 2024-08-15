@@ -35290,7 +35290,7 @@ var Options = function Options() {
     setSettings = _useSettingsStore2[1];
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
       startDate: null,
-      endDate: null // in format YYYY-MM-DD
+      endDate: null
     }),
     _useState2 = _slicedToArray(_useState, 2),
     dateValue = _useState2[0],
@@ -35303,26 +35303,44 @@ var Options = function Options() {
     _useState6 = _slicedToArray(_useState5, 2),
     description = _useState6[0],
     setDescription = _useState6[1];
-  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(settings.backgroundColor || "#f1f5f9"),
+  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("#f1f5f9"),
     _useState8 = _slicedToArray(_useState7, 2),
     backgroundColor = _useState8[0],
     setBackgroundColor = _useState8[1];
-  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(settings.daysColor || "#000000"),
+  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("#000000"),
     _useState10 = _slicedToArray(_useState9, 2),
     daysColor = _useState10[0],
     setDaysColor = _useState10[1];
-  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(settings.decimalsColor || "#000000"),
+  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("#000000"),
     _useState12 = _slicedToArray(_useState11, 2),
     decimalsColor = _useState12[0],
     setDecimalsColor = _useState12[1];
-  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(settings.daysTextColor || "#000000"),
+  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("#000000"),
     _useState14 = _slicedToArray(_useState13, 2),
     daysTextColor = _useState14[0],
     setDaysTextColor = _useState14[1];
-  var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(settings.deadlineTextColor || "#000000"),
+  var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("#000000"),
     _useState16 = _slicedToArray(_useState15, 2),
     deadlineTextColor = _useState16[0],
     setDeadlineTextColor = _useState16[1];
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    if (settings.countdownEndTime) {
+      var countdownDate = new Date(settings.countdownEndTime);
+      var formattedDate = countdownDate.toISOString().split("T")[0];
+      var formattedTime = countdownDate.toTimeString().split(" ")[0].slice(0, 5);
+      setDateValue({
+        startDate: formattedDate,
+        endDate: formattedDate
+      });
+      setTime(formattedTime);
+      setDescription(settings.countdownText);
+      setBackgroundColor(settings.backgroundColor);
+      setDaysColor(settings.daysColor);
+      setDecimalsColor(settings.decimalsColor);
+      setDaysTextColor(settings.daysTextColor);
+      setDeadlineTextColor(settings.deadlineTextColor);
+    }
+  }, [settings]);
   var handleDateChange = function handleDateChange(newValue) {
     if (newValue) {
       var startDate = newValue.startDate,
@@ -35331,30 +35349,21 @@ var Options = function Options() {
         startDate: startDate,
         endDate: endDate
       });
+      setSettings(function (prevState) {
+        return _objectSpread(_objectSpread({}, prevState), {}, {
+          countdownEndTime: new Date("".concat(endDate, "T").concat(time)).getTime()
+        });
+      });
     }
   };
   var handleTimeChange = function handleTimeChange(event) {
     setTime(event.target.value);
-  };
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    if (dateValue.endDate) {
-      var _dateValue$endDate$sp = dateValue.endDate.split("-"),
-        _dateValue$endDate$sp2 = _slicedToArray(_dateValue$endDate$sp, 3),
-        year = _dateValue$endDate$sp2[0],
-        month = _dateValue$endDate$sp2[1],
-        day = _dateValue$endDate$sp2[2];
-      var _time$split = time.split(":"),
-        _time$split2 = _slicedToArray(_time$split, 2),
-        hours = _time$split2[0],
-        minutes = _time$split2[1];
-      var date = new Date(year, month - 1, day, hours, minutes);
-      setSettings(function (prevState) {
-        return _objectSpread(_objectSpread({}, prevState), {}, {
-          countdownEndTime: date.getTime()
-        });
+    setSettings(function (prevState) {
+      return _objectSpread(_objectSpread({}, prevState), {}, {
+        countdownEndTime: new Date("".concat(dateValue.endDate, "T").concat(event.target.value)).getTime()
       });
-    }
-  }, [dateValue.endDate, time, setSettings]);
+    });
+  };
   var handleDescriptionChange = function handleDescriptionChange(event) {
     setDescription(event.target.value);
     setSettings(function (prevState) {
@@ -35363,13 +35372,11 @@ var Options = function Options() {
       });
     });
   };
-
-  // Generic handler for color changes
   var createColorChangeHandler = function createColorChangeHandler(colorKey, setColor) {
     return function (newColor) {
       setColor(newColor);
       setSettings(function (prevState) {
-        return _objectSpread(_objectSpread({}, prevState), {}, _defineProperty({}, colorKey, newColor));
+        return _objectSpread(_objectSpread({}, prevState), {}, _defineProperty(_defineProperty({}, colorKey, newColor), "selectedPreset", null));
       });
     };
   };
@@ -35421,7 +35428,8 @@ var Options = function Options() {
     setDaysTextColor: handleDaysTextColorChange,
     deadlineTextColor: deadlineTextColor,
     setDeadlineTextColor: handleDeadlineTextColorChange,
-    setSettings: setSettings // Pass setSettings to ColorPickerSection
+    setSettings: setSettings,
+    selectedPreset: settings.selectedPreset
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_LivePreview__WEBPACK_IMPORTED_MODULE_3__["default"], {
     backgroundColor: backgroundColor,
     daysColor: daysColor,
@@ -35952,41 +35960,68 @@ var COLOR_PRESETS = [
     },
 ];
 function ColorPickerSection(_a) {
-    var backgroundColor = _a.backgroundColor, setBackgroundColor = _a.setBackgroundColor, daysColor = _a.daysColor, setDaysColor = _a.setDaysColor, decimalsColor = _a.decimalsColor, setDecimalsColor = _a.setDecimalsColor, daysTextColor = _a.daysTextColor, setDaysTextColor = _a.setDaysTextColor, deadlineTextColor = _a.deadlineTextColor, setDeadlineTextColor = _a.setDeadlineTextColor, setSettings = _a.setSettings;
-    var _b = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(0), selectedPresetIndex = _b[0], setSelectedPresetIndex = _b[1];
+    var backgroundColor = _a.backgroundColor, setBackgroundColor = _a.setBackgroundColor, daysColor = _a.daysColor, setDaysColor = _a.setDaysColor, decimalsColor = _a.decimalsColor, setDecimalsColor = _a.setDecimalsColor, daysTextColor = _a.daysTextColor, setDaysTextColor = _a.setDaysTextColor, deadlineTextColor = _a.deadlineTextColor, setDeadlineTextColor = _a.setDeadlineTextColor, setSettings = _a.setSettings, selectedPreset = _a.selectedPreset;
+    var _b = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(selectedPreset !== null &&
+        selectedPreset >= 0 &&
+        selectedPreset < COLOR_PRESETS.length
+        ? selectedPreset
+        : null), selectedPresetIndex = _b[0], setSelectedPresetIndex = _b[1];
     (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-        applyPreset(COLOR_PRESETS[0]);
-    }, []);
+        if (selectedPreset !== null &&
+            selectedPreset >= 0 &&
+            selectedPreset < COLOR_PRESETS.length) {
+            applyPreset(COLOR_PRESETS[selectedPreset], selectedPreset);
+        }
+    }, [selectedPreset]);
     var applyPreset = function (preset, index) {
+        if (!preset)
+            return; // Ensure preset is valid
         setBackgroundColor(preset.backgroundColor);
         setDaysColor(preset.daysColor);
         setDecimalsColor(preset.decimalsColor);
         setDaysTextColor(preset.daysTextColor);
         setDeadlineTextColor(preset.deadlineTextColor);
         // Update the settings store as well
-        setSettings(function (prevState) { return (__assign(__assign({}, prevState), { backgroundColor: preset.backgroundColor, daysColor: preset.daysColor, decimalsColor: preset.decimalsColor, daysTextColor: preset.daysTextColor, deadlineTextColor: preset.deadlineTextColor })); });
-        if (index !== undefined) {
-            setSelectedPresetIndex(index);
-        }
-        console.log("updated colors to: ", preset);
+        setSettings(function (prevState) { return (__assign(__assign({}, prevState), { backgroundColor: preset.backgroundColor, daysColor: preset.daysColor, decimalsColor: preset.decimalsColor, daysTextColor: preset.daysTextColor, deadlineTextColor: preset.deadlineTextColor, selectedPreset: index })); });
+        setSelectedPresetIndex(index);
     };
     return (react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "p-4 flex-grow" },
         react__WEBPACK_IMPORTED_MODULE_0__.createElement("h2", { className: "text-xl font-bold mb-4" }, "Customize styles"),
         react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "flex flex-wrap" },
             react__WEBPACK_IMPORTED_MODULE_0__.createElement("label", { className: "block text-sm font-medium w-1/2 pr-2" }, "Background Color"),
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement("input", { type: "color", className: "h-10 w-1/2 block bg-white cursor-pointer", value: backgroundColor, onChange: function (e) { return setBackgroundColor(e.target.value); } })),
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement("input", { type: "color", className: "h-10 w-1/2 block bg-white cursor-pointer", value: backgroundColor, onChange: function (e) {
+                    setBackgroundColor(e.target.value);
+                    setSettings(function (prevState) { return (__assign(__assign({}, prevState), { backgroundColor: e.target.value, selectedPreset: null })); });
+                    setSelectedPresetIndex(null);
+                } })),
         react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "flex flex-wrap mt-2" },
             react__WEBPACK_IMPORTED_MODULE_0__.createElement("label", { className: "block text-sm font-medium w-1/2 pr-2" }, "Days Color"),
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement("input", { type: "color", className: "h-10 w-1/2 block bg-white cursor-pointer", value: daysColor, onChange: function (e) { return setDaysColor(e.target.value); } })),
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement("input", { type: "color", className: "h-10 w-1/2 block bg-white cursor-pointer", value: daysColor, onChange: function (e) {
+                    setDaysColor(e.target.value);
+                    setSettings(function (prevState) { return (__assign(__assign({}, prevState), { daysColor: e.target.value, selectedPreset: null })); });
+                    setSelectedPresetIndex(null);
+                } })),
         react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "flex flex-wrap mt-2" },
             react__WEBPACK_IMPORTED_MODULE_0__.createElement("label", { className: "block text-sm font-medium w-1/2 pr-2" }, "Decimals Color"),
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement("input", { type: "color", className: "h-10 w-1/2 block bg-white cursor-pointer", value: decimalsColor, onChange: function (e) { return setDecimalsColor(e.target.value); } })),
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement("input", { type: "color", className: "h-10 w-1/2 block bg-white cursor-pointer", value: decimalsColor, onChange: function (e) {
+                    setDecimalsColor(e.target.value);
+                    setSettings(function (prevState) { return (__assign(__assign({}, prevState), { decimalsColor: e.target.value, selectedPreset: null })); });
+                    setSelectedPresetIndex(null);
+                } })),
         react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "flex flex-wrap mt-2" },
             react__WEBPACK_IMPORTED_MODULE_0__.createElement("label", { className: "block text-sm font-medium w-1/2 pr-2" }, "Days Text Color"),
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement("input", { type: "color", className: "h-10 w-1/2 block bg-white cursor-pointer", value: daysTextColor, onChange: function (e) { return setDaysTextColor(e.target.value); } })),
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement("input", { type: "color", className: "h-10 w-1/2 block bg-white cursor-pointer", value: daysTextColor, onChange: function (e) {
+                    setDaysTextColor(e.target.value);
+                    setSettings(function (prevState) { return (__assign(__assign({}, prevState), { daysTextColor: e.target.value, selectedPreset: null })); });
+                    setSelectedPresetIndex(null);
+                } })),
         react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "flex flex-wrap mt-2" },
             react__WEBPACK_IMPORTED_MODULE_0__.createElement("label", { className: "block text-sm font-medium w-1/2 pr-2" }, "Deadline Text Color"),
-            react__WEBPACK_IMPORTED_MODULE_0__.createElement("input", { type: "color", className: "h-10 w-1/2 block bg-white cursor-pointer", value: deadlineTextColor, onChange: function (e) { return setDeadlineTextColor(e.target.value); } })),
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement("input", { type: "color", className: "h-10 w-1/2 block bg-white cursor-pointer", value: deadlineTextColor, onChange: function (e) {
+                    setDeadlineTextColor(e.target.value);
+                    setSettings(function (prevState) { return (__assign(__assign({}, prevState), { deadlineTextColor: e.target.value, selectedPreset: null })); });
+                    setSelectedPresetIndex(null);
+                } })),
         react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "mt-8" },
             react__WEBPACK_IMPORTED_MODULE_0__.createElement("h2", { className: "text-xl font-bold mb-4" }, "Color Presets"),
             react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "flex justify-between" }, COLOR_PRESETS.map(function (preset, index) { return (react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { key: index, className: "w-16 h-16 cursor-pointer border hover:scale-110 ".concat(selectedPresetIndex === index
@@ -38425,7 +38460,7 @@ module.exports.formatError = function (err) {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("3b87d7e41aead19bce21")
+/******/ 		__webpack_require__.h = () => ("30eeac2ccf4315bb608c")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */

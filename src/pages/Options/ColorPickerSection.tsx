@@ -49,15 +49,30 @@ export default function ColorPickerSection({
   setDaysTextColor,
   deadlineTextColor,
   setDeadlineTextColor,
-  setSettings, // Receive setSettings as a prop
+  setSettings,
+  selectedPreset,
 }) {
-  const [selectedPresetIndex, setSelectedPresetIndex] = useState(0);
+  const [selectedPresetIndex, setSelectedPresetIndex] = useState(
+    selectedPreset !== null &&
+      selectedPreset >= 0 &&
+      selectedPreset < COLOR_PRESETS.length
+      ? selectedPreset
+      : null
+  );
 
   useEffect(() => {
-    applyPreset(COLOR_PRESETS[0]);
-  }, []);
+    if (
+      selectedPreset !== null &&
+      selectedPreset >= 0 &&
+      selectedPreset < COLOR_PRESETS.length
+    ) {
+      applyPreset(COLOR_PRESETS[selectedPreset], selectedPreset);
+    }
+  }, [selectedPreset]);
 
   const applyPreset = (preset, index) => {
+    if (!preset) return; // Ensure preset is valid
+
     setBackgroundColor(preset.backgroundColor);
     setDaysColor(preset.daysColor);
     setDecimalsColor(preset.decimalsColor);
@@ -72,12 +87,10 @@ export default function ColorPickerSection({
       decimalsColor: preset.decimalsColor,
       daysTextColor: preset.daysTextColor,
       deadlineTextColor: preset.deadlineTextColor,
+      selectedPreset: index,
     }));
 
-    if (index !== undefined) {
-      setSelectedPresetIndex(index);
-    }
-    console.log("updated colors to: ", preset);
+    setSelectedPresetIndex(index);
   };
 
   return (
@@ -91,7 +104,15 @@ export default function ColorPickerSection({
           type="color"
           className="h-10 w-1/2 block bg-white cursor-pointer"
           value={backgroundColor}
-          onChange={(e) => setBackgroundColor(e.target.value)}
+          onChange={(e) => {
+            setBackgroundColor(e.target.value);
+            setSettings((prevState) => ({
+              ...prevState,
+              backgroundColor: e.target.value,
+              selectedPreset: null, // Deactivate preset when custom color is selected
+            }));
+            setSelectedPresetIndex(null);
+          }}
         />
       </div>
       <div className="flex flex-wrap mt-2">
@@ -102,7 +123,15 @@ export default function ColorPickerSection({
           type="color"
           className="h-10 w-1/2 block bg-white cursor-pointer"
           value={daysColor}
-          onChange={(e) => setDaysColor(e.target.value)}
+          onChange={(e) => {
+            setDaysColor(e.target.value);
+            setSettings((prevState) => ({
+              ...prevState,
+              daysColor: e.target.value,
+              selectedPreset: null,
+            }));
+            setSelectedPresetIndex(null);
+          }}
         />
       </div>
       <div className="flex flex-wrap mt-2">
@@ -113,7 +142,15 @@ export default function ColorPickerSection({
           type="color"
           className="h-10 w-1/2 block bg-white cursor-pointer"
           value={decimalsColor}
-          onChange={(e) => setDecimalsColor(e.target.value)}
+          onChange={(e) => {
+            setDecimalsColor(e.target.value);
+            setSettings((prevState) => ({
+              ...prevState,
+              decimalsColor: e.target.value,
+              selectedPreset: null,
+            }));
+            setSelectedPresetIndex(null);
+          }}
         />
       </div>
       <div className="flex flex-wrap mt-2">
@@ -124,7 +161,15 @@ export default function ColorPickerSection({
           type="color"
           className="h-10 w-1/2 block bg-white cursor-pointer"
           value={daysTextColor}
-          onChange={(e) => setDaysTextColor(e.target.value)}
+          onChange={(e) => {
+            setDaysTextColor(e.target.value);
+            setSettings((prevState) => ({
+              ...prevState,
+              daysTextColor: e.target.value,
+              selectedPreset: null,
+            }));
+            setSelectedPresetIndex(null);
+          }}
         />
       </div>
       <div className="flex flex-wrap mt-2">
@@ -135,7 +180,15 @@ export default function ColorPickerSection({
           type="color"
           className="h-10 w-1/2 block bg-white cursor-pointer"
           value={deadlineTextColor}
-          onChange={(e) => setDeadlineTextColor(e.target.value)}
+          onChange={(e) => {
+            setDeadlineTextColor(e.target.value);
+            setSettings((prevState) => ({
+              ...prevState,
+              deadlineTextColor: e.target.value,
+              selectedPreset: null,
+            }));
+            setSelectedPresetIndex(null);
+          }}
         />
       </div>
 

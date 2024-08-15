@@ -9,47 +9,60 @@ const Options = () => {
 
   const [dateValue, setDateValue] = useState({
     startDate: null,
-    endDate: null, // in format YYYY-MM-DD
+    endDate: null,
   });
   const [time, setTime] = useState("00:00");
   const [description, setDescription] = useState("");
 
-  const [backgroundColor, setBackgroundColor] = useState(
-    settings.backgroundColor || "#f1f5f9"
-  );
-  const [daysColor, setDaysColor] = useState(settings.daysColor || "#000000");
-  const [decimalsColor, setDecimalsColor] = useState(
-    settings.decimalsColor || "#000000"
-  );
-  const [daysTextColor, setDaysTextColor] = useState(
-    settings.daysTextColor || "#000000"
-  );
-  const [deadlineTextColor, setDeadlineTextColor] = useState(
-    settings.deadlineTextColor || "#000000"
-  );
+  const [backgroundColor, setBackgroundColor] = useState("#f1f5f9");
+  const [daysColor, setDaysColor] = useState("#000000");
+  const [decimalsColor, setDecimalsColor] = useState("#000000");
+  const [daysTextColor, setDaysTextColor] = useState("#000000");
+  const [deadlineTextColor, setDeadlineTextColor] = useState("#000000");
+
+  useEffect(() => {
+    if (settings.countdownEndTime) {
+      const countdownDate = new Date(settings.countdownEndTime);
+      const formattedDate = countdownDate.toISOString().split("T")[0];
+      const formattedTime = countdownDate
+        .toTimeString()
+        .split(" ")[0]
+        .slice(0, 5);
+
+      setDateValue({
+        startDate: formattedDate,
+        endDate: formattedDate,
+      });
+      setTime(formattedTime);
+      setDescription(settings.countdownText);
+      setBackgroundColor(settings.backgroundColor);
+      setDaysColor(settings.daysColor);
+      setDecimalsColor(settings.decimalsColor);
+      setDaysTextColor(settings.daysTextColor);
+      setDeadlineTextColor(settings.deadlineTextColor);
+    }
+  }, [settings]);
 
   const handleDateChange = (newValue) => {
     if (newValue) {
       const { startDate, endDate } = newValue;
       setDateValue({ startDate, endDate });
+      setSettings((prevState) => ({
+        ...prevState,
+        countdownEndTime: new Date(`${endDate}T${time}`).getTime(),
+      }));
     }
   };
 
   const handleTimeChange = (event) => {
     setTime(event.target.value);
+    setSettings((prevState) => ({
+      ...prevState,
+      countdownEndTime: new Date(
+        `${dateValue.endDate}T${event.target.value}`
+      ).getTime(),
+    }));
   };
-
-  useEffect(() => {
-    if (dateValue.endDate) {
-      const [year, month, day] = dateValue.endDate.split("-");
-      const [hours, minutes] = time.split(":");
-      const date = new Date(year, month - 1, day, hours, minutes);
-      setSettings((prevState) => ({
-        ...prevState,
-        countdownEndTime: date.getTime(),
-      }));
-    }
-  }, [dateValue.endDate, time, setSettings]);
 
   const handleDescriptionChange = (event) => {
     setDescription(event.target.value);
@@ -59,12 +72,12 @@ const Options = () => {
     }));
   };
 
-  // Generic handler for color changes
   const createColorChangeHandler = (colorKey, setColor) => (newColor) => {
     setColor(newColor);
     setSettings((prevState) => ({
       ...prevState,
       [colorKey]: newColor,
+      selectedPreset: null,
     }));
   };
 
@@ -131,7 +144,8 @@ const Options = () => {
           setDaysTextColor={handleDaysTextColorChange}
           deadlineTextColor={deadlineTextColor}
           setDeadlineTextColor={handleDeadlineTextColorChange}
-          setSettings={setSettings} // Pass setSettings to ColorPickerSection
+          setSettings={setSettings}
+          selectedPreset={settings.selectedPreset}
         />
 
         <LivePreview
