@@ -1,86 +1,115 @@
-import React from "react";
-import { useSettingsStore } from "./../../common/useSettingsStore";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import React, { useEffect, useState } from "react";
+import { useSettingsStore } from "../../common/useSettingsStore";
+import Datepicker, {
+  DateRangeType,
+  DateValueType,
+} from "react-tailwindcss-datepicker";
+import LivePreview from "./LivePreview";
+import ColorPickerSection from "./ColorPickerSection";
 
 const Options = () => {
   const [settings, setSettings] = useSettingsStore();
-  // countdownDate logic
-  const countdownDate = Date.parse(settings.countdownDate);
-  const handleDateChange = (date) => {
-    setSettings((prevState) => {
-      return {
-        ...prevState,
-        countdownDate: new Date(date).toString(),
-      };
-    });
+  // example of retrieval and setting of settings
+  // const countdownText = settings.countdownText;
+  // const handleDisplayTextChange = (e) => {
+  //   setSettings((prevState) => {
+  //     return {
+  //       ...prevState,
+  //       countdownText: e.target.value,
+  //     };
+  //   });
+  // };
+
+  const [dateValue, setDateValue] = useState({
+    startDate: null,
+    endDate: null,
+  });
+  const [time, setTime] = useState("00:00");
+  const [description, setDescription] = useState("");
+
+  const [backgroundColor, setBackgroundColor] = useState("#f1f5f9");
+  const [daysColor, setDaysColor] = useState("#000000");
+  const [decimalsColor, setDecimalsColor] = useState("#000000");
+  const [daysTextColor, setDaysTextColor] = useState("#000000");
+  const [deadlineTextColor, setDeadlineTextColor] = useState("#000000");
+
+  const handleDateChange = (newValue) => {
+    if (newValue) {
+      const { startDate, endDate } = newValue;
+      setDateValue({ startDate, endDate });
+    }
   };
-  // display text logic
-  const countdownText = settings.countdownText;
-  const handleDisplayTextChange = (e) => {
-    setSettings((prevState) => {
-      return {
-        ...prevState,
-        countdownText: e.target.value,
-      };
-    });
+
+  const handleTimeChange = (event) => {
+    setTime(event.target.value);
   };
-  // console.log('settings', settings);
+
+  const handleDescriptionChange = (event) => {
+    setDescription(event.target.value);
+  };
 
   return (
-    <div className="h-full">
-      <div className="p-5">
-        <form className="space-y-8 divide-y divide-gray-200">
-          <div className="space-y-8 divide-y divide-gray-200 sm:space-y-5">
-            <div className="space-y-6 sm:space-y-5">
-              <div>
-                <h2 className="text-xl font-medium leading-6 text-gray-900">
-                  Countdown
-                </h2>
-                <p className="mt-1 max-w-2xl text-sm text-gray-500">
-                  Personalize the start date and the message to display
-                </p>
-              </div>
-
-              <div className="space-y-6 sm:space-y-5">
-                <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
-                  <label
-                    htmlFor="Date"
-                    className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
-                  >
-                    Date
-                  </label>
-                  <DatePicker
-                    selected={countdownDate}
-                    onChange={(date) => handleDateChange(date)}
-                    dateFormat="dd/MM/yyyy"
-                  />
-                </div>
-
-                <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
-                  <label
-                    htmlFor="about"
-                    className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
-                  >
-                    Display text
-                  </label>
-                  <div className="mt-1 sm:col-span-2 sm:mt-0">
-                    <textarea
-                      id="about"
-                      name="about"
-                      rows={3}
-                      className="block w-full max-w-lg rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                      value={countdownText}
-                      onChange={(e) => handleDisplayTextChange(e)}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </form>
+    <main className="min-h-screen flex flex-col md:flex-row relative">
+      <div className="md:min-h-screen flex flex-col md:items-center md:justify-center md:p-24 p-12 text-slate-800 bg-slate-100 md:w-1/2 xl:w-2/3">
+        <p className="text-xl mt-4">1. Select a date:</p>
+        <div className="w-full md:w-96 mt-2">
+          <Datepicker
+            asSingle={true}
+            useRange={false}
+            value={dateValue}
+            onChange={handleDateChange}
+          />
+        </div>
+        <p className="text-xl mt-4">2. Select a specific time:</p>
+        <p className="text-sm">(optional, defaults to midnight if not set):</p>
+        <input
+          type="time"
+          value={time}
+          onChange={handleTimeChange}
+          className="border border-gray-300 rounded-md p-2 mt-2 w-full md:w-96"
+        />
+        <p className="text-xl mt-4">3. Add a description:</p>
+        <input
+          type="text"
+          value={description}
+          onChange={handleDescriptionChange}
+          placeholder="e.g. My super important event"
+          className="border border-gray-300 rounded-md p-2 mt-2 md:w-96"
+        />
       </div>
-    </div>
+
+      <div className="md:fixed md:h-full md:right-0 md:top-0 md:w-1/2 xl:w-1/3 bg-white md:shadow-lg flex flex-col">
+        <ColorPickerSection
+          backgroundColor={backgroundColor}
+          setBackgroundColor={setBackgroundColor}
+          daysColor={daysColor}
+          setDaysColor={setDaysColor}
+          decimalsColor={decimalsColor}
+          setDecimalsColor={setDecimalsColor}
+          daysTextColor={daysTextColor}
+          setDaysTextColor={setDaysTextColor}
+          deadlineTextColor={deadlineTextColor}
+          setDeadlineTextColor={setDeadlineTextColor}
+        />
+
+        <LivePreview
+          backgroundColor={backgroundColor}
+          daysColor={daysColor}
+          decimalsColor={decimalsColor}
+          daysTextColor={daysTextColor}
+          deadlineTextColor={deadlineTextColor}
+        />
+      </div>
+      <div className="fixed bottom-0 left-0 p-2 text-gray-500 bg-white flex justify-center items-center rounded-tr-lg text-sm">
+        <a
+          href="https://www.linkedin.com/in/danielcarmonaserrat/"
+          className=""
+          target="_blank"
+        >
+          Created by <span className="underline">Daniel Carmona Serrat</span>
+        </a>
+      </div>
+    </main>
   );
 };
 export default Options;
