@@ -35288,17 +35288,6 @@ var Options = function Options() {
     _useSettingsStore2 = _slicedToArray(_useSettingsStore, 2),
     settings = _useSettingsStore2[0],
     setSettings = _useSettingsStore2[1];
-  // example of retrieval and setting of settings
-  // const countdownText = settings.countdownText;
-  // const handleDisplayTextChange = (e) => {
-  //   setSettings((prevState) => {
-  //     return {
-  //       ...prevState,
-  //       countdownText: e.target.value,
-  //     };
-  //   });
-  // };
-
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
       startDate: null,
       endDate: null // in format YYYY-MM-DD
@@ -35314,23 +35303,23 @@ var Options = function Options() {
     _useState6 = _slicedToArray(_useState5, 2),
     description = _useState6[0],
     setDescription = _useState6[1];
-  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("#f1f5f9"),
+  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(settings.backgroundColor || "#f1f5f9"),
     _useState8 = _slicedToArray(_useState7, 2),
     backgroundColor = _useState8[0],
     setBackgroundColor = _useState8[1];
-  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("#000000"),
+  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(settings.daysColor || "#000000"),
     _useState10 = _slicedToArray(_useState9, 2),
     daysColor = _useState10[0],
     setDaysColor = _useState10[1];
-  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("#000000"),
+  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(settings.decimalsColor || "#000000"),
     _useState12 = _slicedToArray(_useState11, 2),
     decimalsColor = _useState12[0],
     setDecimalsColor = _useState12[1];
-  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("#000000"),
+  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(settings.daysTextColor || "#000000"),
     _useState14 = _slicedToArray(_useState13, 2),
     daysTextColor = _useState14[0],
     setDaysTextColor = _useState14[1];
-  var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("#000000"),
+  var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(settings.deadlineTextColor || "#000000"),
     _useState16 = _slicedToArray(_useState15, 2),
     deadlineTextColor = _useState16[0],
     setDeadlineTextColor = _useState16[1];
@@ -35347,9 +35336,6 @@ var Options = function Options() {
   var handleTimeChange = function handleTimeChange(event) {
     setTime(event.target.value);
   };
-
-  // we need a useEffect to update countdownEndTime every time that
-  // dateValue.endDate or time changes.
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     if (dateValue.endDate) {
       var _dateValue$endDate$sp = dateValue.endDate.split("-"),
@@ -35368,7 +35354,7 @@ var Options = function Options() {
         });
       });
     }
-  }, [dateValue.endDate, time]);
+  }, [dateValue.endDate, time, setSettings]);
   var handleDescriptionChange = function handleDescriptionChange(event) {
     setDescription(event.target.value);
     setSettings(function (prevState) {
@@ -35377,6 +35363,21 @@ var Options = function Options() {
       });
     });
   };
+
+  // Generic handler for color changes
+  var createColorChangeHandler = function createColorChangeHandler(colorKey, setColor) {
+    return function (newColor) {
+      setColor(newColor);
+      setSettings(function (prevState) {
+        return _objectSpread(_objectSpread({}, prevState), {}, _defineProperty({}, colorKey, newColor));
+      });
+    };
+  };
+  var handleBackgroundColorChange = createColorChangeHandler("backgroundColor", setBackgroundColor);
+  var handleDaysColorChange = createColorChangeHandler("daysColor", setDaysColor);
+  var handleDecimalsColorChange = createColorChangeHandler("decimalsColor", setDecimalsColor);
+  var handleDaysTextColorChange = createColorChangeHandler("daysTextColor", setDaysTextColor);
+  var handleDeadlineTextColorChange = createColorChangeHandler("deadlineTextColor", setDeadlineTextColor);
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("main", {
     className: "min-h-screen flex flex-col md:flex-row relative"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
@@ -35411,15 +35412,16 @@ var Options = function Options() {
     className: "md:fixed md:h-full md:right-0 md:top-0 md:w-1/2 xl:w-1/3 bg-white md:shadow-lg flex flex-col"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_ColorPickerSection__WEBPACK_IMPORTED_MODULE_4__["default"], {
     backgroundColor: backgroundColor,
-    setBackgroundColor: setBackgroundColor,
+    setBackgroundColor: handleBackgroundColorChange,
     daysColor: daysColor,
-    setDaysColor: setDaysColor,
+    setDaysColor: handleDaysColorChange,
     decimalsColor: decimalsColor,
-    setDecimalsColor: setDecimalsColor,
+    setDecimalsColor: handleDecimalsColorChange,
     daysTextColor: daysTextColor,
-    setDaysTextColor: setDaysTextColor,
+    setDaysTextColor: handleDaysTextColorChange,
     deadlineTextColor: deadlineTextColor,
-    setDeadlineTextColor: setDeadlineTextColor
+    setDeadlineTextColor: handleDeadlineTextColorChange,
+    setSettings: setSettings // Pass setSettings to ColorPickerSection
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_LivePreview__WEBPACK_IMPORTED_MODULE_3__["default"], {
     backgroundColor: backgroundColor,
     daysColor: daysColor,
@@ -35900,6 +35902,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* binding */ ColorPickerSection)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var __assign = (undefined && undefined.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 
 var COLOR_PRESETS = [
     {
@@ -35939,9 +35952,8 @@ var COLOR_PRESETS = [
     },
 ];
 function ColorPickerSection(_a) {
-    var backgroundColor = _a.backgroundColor, setBackgroundColor = _a.setBackgroundColor, daysColor = _a.daysColor, setDaysColor = _a.setDaysColor, decimalsColor = _a.decimalsColor, setDecimalsColor = _a.setDecimalsColor, daysTextColor = _a.daysTextColor, setDaysTextColor = _a.setDaysTextColor, deadlineTextColor = _a.deadlineTextColor, setDeadlineTextColor = _a.setDeadlineTextColor;
+    var backgroundColor = _a.backgroundColor, setBackgroundColor = _a.setBackgroundColor, daysColor = _a.daysColor, setDaysColor = _a.setDaysColor, decimalsColor = _a.decimalsColor, setDecimalsColor = _a.setDecimalsColor, daysTextColor = _a.daysTextColor, setDaysTextColor = _a.setDaysTextColor, deadlineTextColor = _a.deadlineTextColor, setDeadlineTextColor = _a.setDeadlineTextColor, setSettings = _a.setSettings;
     var _b = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(0), selectedPresetIndex = _b[0], setSelectedPresetIndex = _b[1];
-    // Set default colors based on the first preset
     (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
         applyPreset(COLOR_PRESETS[0]);
     }, []);
@@ -35951,9 +35963,12 @@ function ColorPickerSection(_a) {
         setDecimalsColor(preset.decimalsColor);
         setDaysTextColor(preset.daysTextColor);
         setDeadlineTextColor(preset.deadlineTextColor);
+        // Update the settings store as well
+        setSettings(function (prevState) { return (__assign(__assign({}, prevState), { backgroundColor: preset.backgroundColor, daysColor: preset.daysColor, decimalsColor: preset.decimalsColor, daysTextColor: preset.daysTextColor, deadlineTextColor: preset.deadlineTextColor })); });
         if (index !== undefined) {
             setSelectedPresetIndex(index);
         }
+        console.log("updated colors to: ", preset);
     };
     return (react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "p-4 flex-grow" },
         react__WEBPACK_IMPORTED_MODULE_0__.createElement("h2", { className: "text-xl font-bold mb-4" }, "Customize styles"),
@@ -38410,7 +38425,7 @@ module.exports.formatError = function (err) {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("30fd75a86f6d5e08dd16")
+/******/ 		__webpack_require__.h = () => ("3b87d7e41aead19bce21")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */

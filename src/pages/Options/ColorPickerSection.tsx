@@ -49,34 +49,35 @@ export default function ColorPickerSection({
   setDaysTextColor,
   deadlineTextColor,
   setDeadlineTextColor,
-}: {
-  backgroundColor: string;
-  setBackgroundColor: React.Dispatch<React.SetStateAction<string>>;
-  daysColor: string;
-  setDaysColor: React.Dispatch<React.SetStateAction<string>>;
-  decimalsColor: string;
-  setDecimalsColor: React.Dispatch<React.SetStateAction<string>>;
-  daysTextColor: string;
-  setDaysTextColor: React.Dispatch<React.SetStateAction<string>>;
-  deadlineTextColor: string;
-  setDeadlineTextColor: React.Dispatch<React.SetStateAction<string>>;
+  setSettings, // Receive setSettings as a prop
 }) {
   const [selectedPresetIndex, setSelectedPresetIndex] = useState(0);
 
-  // Set default colors based on the first preset
   useEffect(() => {
     applyPreset(COLOR_PRESETS[0]);
   }, []);
 
-  const applyPreset = (preset: typeof COLOR_PRESETS[0], index?: number) => {
+  const applyPreset = (preset, index) => {
     setBackgroundColor(preset.backgroundColor);
     setDaysColor(preset.daysColor);
     setDecimalsColor(preset.decimalsColor);
     setDaysTextColor(preset.daysTextColor);
     setDeadlineTextColor(preset.deadlineTextColor);
+
+    // Update the settings store as well
+    setSettings((prevState) => ({
+      ...prevState,
+      backgroundColor: preset.backgroundColor,
+      daysColor: preset.daysColor,
+      decimalsColor: preset.decimalsColor,
+      daysTextColor: preset.daysTextColor,
+      deadlineTextColor: preset.deadlineTextColor,
+    }));
+
     if (index !== undefined) {
       setSelectedPresetIndex(index);
     }
+    console.log("updated colors to: ", preset);
   };
 
   return (

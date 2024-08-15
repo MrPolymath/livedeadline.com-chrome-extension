@@ -1,24 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useSettingsStore } from "../../common/useSettingsStore";
-import Datepicker, {
-  DateRangeType,
-  DateValueType,
-} from "react-tailwindcss-datepicker";
+import Datepicker from "react-tailwindcss-datepicker";
 import LivePreview from "./LivePreview";
 import ColorPickerSection from "./ColorPickerSection";
 
 const Options = () => {
   const [settings, setSettings] = useSettingsStore();
-  // example of retrieval and setting of settings
-  // const countdownText = settings.countdownText;
-  // const handleDisplayTextChange = (e) => {
-  //   setSettings((prevState) => {
-  //     return {
-  //       ...prevState,
-  //       countdownText: e.target.value,
-  //     };
-  //   });
-  // };
 
   const [dateValue, setDateValue] = useState({
     startDate: null,
@@ -27,11 +14,19 @@ const Options = () => {
   const [time, setTime] = useState("00:00");
   const [description, setDescription] = useState("");
 
-  const [backgroundColor, setBackgroundColor] = useState("#f1f5f9");
-  const [daysColor, setDaysColor] = useState("#000000");
-  const [decimalsColor, setDecimalsColor] = useState("#000000");
-  const [daysTextColor, setDaysTextColor] = useState("#000000");
-  const [deadlineTextColor, setDeadlineTextColor] = useState("#000000");
+  const [backgroundColor, setBackgroundColor] = useState(
+    settings.backgroundColor || "#f1f5f9"
+  );
+  const [daysColor, setDaysColor] = useState(settings.daysColor || "#000000");
+  const [decimalsColor, setDecimalsColor] = useState(
+    settings.decimalsColor || "#000000"
+  );
+  const [daysTextColor, setDaysTextColor] = useState(
+    settings.daysTextColor || "#000000"
+  );
+  const [deadlineTextColor, setDeadlineTextColor] = useState(
+    settings.deadlineTextColor || "#000000"
+  );
 
   const handleDateChange = (newValue) => {
     if (newValue) {
@@ -44,31 +39,55 @@ const Options = () => {
     setTime(event.target.value);
   };
 
-  // we need a useEffect to update countdownEndTime every time that
-  // dateValue.endDate or time changes.
   useEffect(() => {
     if (dateValue.endDate) {
       const [year, month, day] = dateValue.endDate.split("-");
       const [hours, minutes] = time.split(":");
       const date = new Date(year, month - 1, day, hours, minutes);
-      setSettings((prevState) => {
-        return {
-          ...prevState,
-          countdownEndTime: date.getTime(),
-        };
-      });
+      setSettings((prevState) => ({
+        ...prevState,
+        countdownEndTime: date.getTime(),
+      }));
     }
-  }, [dateValue.endDate, time]);
+  }, [dateValue.endDate, time, setSettings]);
 
   const handleDescriptionChange = (event) => {
     setDescription(event.target.value);
-    setSettings((prevState) => {
-      return {
-        ...prevState,
-        countdownText: event.target.value,
-      };
-    });
+    setSettings((prevState) => ({
+      ...prevState,
+      countdownText: event.target.value,
+    }));
   };
+
+  // Generic handler for color changes
+  const createColorChangeHandler = (colorKey, setColor) => (newColor) => {
+    setColor(newColor);
+    setSettings((prevState) => ({
+      ...prevState,
+      [colorKey]: newColor,
+    }));
+  };
+
+  const handleBackgroundColorChange = createColorChangeHandler(
+    "backgroundColor",
+    setBackgroundColor
+  );
+  const handleDaysColorChange = createColorChangeHandler(
+    "daysColor",
+    setDaysColor
+  );
+  const handleDecimalsColorChange = createColorChangeHandler(
+    "decimalsColor",
+    setDecimalsColor
+  );
+  const handleDaysTextColorChange = createColorChangeHandler(
+    "daysTextColor",
+    setDaysTextColor
+  );
+  const handleDeadlineTextColorChange = createColorChangeHandler(
+    "deadlineTextColor",
+    setDeadlineTextColor
+  );
 
   return (
     <main className="min-h-screen flex flex-col md:flex-row relative">
@@ -103,15 +122,16 @@ const Options = () => {
       <div className="md:fixed md:h-full md:right-0 md:top-0 md:w-1/2 xl:w-1/3 bg-white md:shadow-lg flex flex-col">
         <ColorPickerSection
           backgroundColor={backgroundColor}
-          setBackgroundColor={setBackgroundColor}
+          setBackgroundColor={handleBackgroundColorChange}
           daysColor={daysColor}
-          setDaysColor={setDaysColor}
+          setDaysColor={handleDaysColorChange}
           decimalsColor={decimalsColor}
-          setDecimalsColor={setDecimalsColor}
+          setDecimalsColor={handleDecimalsColorChange}
           daysTextColor={daysTextColor}
-          setDaysTextColor={setDaysTextColor}
+          setDaysTextColor={handleDaysTextColorChange}
           deadlineTextColor={deadlineTextColor}
-          setDeadlineTextColor={setDeadlineTextColor}
+          setDeadlineTextColor={handleDeadlineTextColorChange}
+          setSettings={setSettings} // Pass setSettings to ColorPickerSection
         />
 
         <LivePreview
