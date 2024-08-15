@@ -35269,6 +35269,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_tailwindcss_datepicker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-tailwindcss-datepicker */ "./node_modules/react-tailwindcss-datepicker/dist/index.esm.js");
 /* harmony import */ var _LivePreview__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./LivePreview */ "./src/pages/Options/LivePreview.tsx");
 /* harmony import */ var _ColorPickerSection__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./ColorPickerSection */ "./src/pages/Options/ColorPickerSection.tsx");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -35298,7 +35301,7 @@ var Options = function Options() {
 
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
       startDate: null,
-      endDate: null
+      endDate: null // in format YYYY-MM-DD
     }),
     _useState2 = _slicedToArray(_useState, 2),
     dateValue = _useState2[0],
@@ -35344,8 +35347,35 @@ var Options = function Options() {
   var handleTimeChange = function handleTimeChange(event) {
     setTime(event.target.value);
   };
+
+  // we need a useEffect to update countdownEndTime every time that
+  // dateValue.endDate or time changes.
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    if (dateValue.endDate) {
+      var _dateValue$endDate$sp = dateValue.endDate.split("-"),
+        _dateValue$endDate$sp2 = _slicedToArray(_dateValue$endDate$sp, 3),
+        year = _dateValue$endDate$sp2[0],
+        month = _dateValue$endDate$sp2[1],
+        day = _dateValue$endDate$sp2[2];
+      var _time$split = time.split(":"),
+        _time$split2 = _slicedToArray(_time$split, 2),
+        hours = _time$split2[0],
+        minutes = _time$split2[1];
+      var date = new Date(year, month - 1, day, hours, minutes);
+      setSettings(function (prevState) {
+        return _objectSpread(_objectSpread({}, prevState), {}, {
+          countdownEndTime: date.getTime()
+        });
+      });
+    }
+  }, [dateValue.endDate, time]);
   var handleDescriptionChange = function handleDescriptionChange(event) {
     setDescription(event.target.value);
+    setSettings(function (prevState) {
+      return _objectSpread(_objectSpread({}, prevState), {}, {
+        countdownText: event.target.value
+      });
+    });
   };
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("main", {
     className: "min-h-screen flex flex-col md:flex-row relative"
@@ -38380,7 +38410,7 @@ module.exports.formatError = function (err) {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("32dcf5111f7f8739de88")
+/******/ 		__webpack_require__.h = () => ("30fd75a86f6d5e08dd16")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */

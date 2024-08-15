@@ -22,7 +22,7 @@ const Options = () => {
 
   const [dateValue, setDateValue] = useState({
     startDate: null,
-    endDate: null,
+    endDate: null, // in format YYYY-MM-DD
   });
   const [time, setTime] = useState("00:00");
   const [description, setDescription] = useState("");
@@ -44,8 +44,30 @@ const Options = () => {
     setTime(event.target.value);
   };
 
+  // we need a useEffect to update countdownEndTime every time that
+  // dateValue.endDate or time changes.
+  useEffect(() => {
+    if (dateValue.endDate) {
+      const [year, month, day] = dateValue.endDate.split("-");
+      const [hours, minutes] = time.split(":");
+      const date = new Date(year, month - 1, day, hours, minutes);
+      setSettings((prevState) => {
+        return {
+          ...prevState,
+          countdownEndTime: date.getTime(),
+        };
+      });
+    }
+  }, [dateValue.endDate, time]);
+
   const handleDescriptionChange = (event) => {
     setDescription(event.target.value);
+    setSettings((prevState) => {
+      return {
+        ...prevState,
+        countdownText: event.target.value,
+      };
+    });
   };
 
   return (
