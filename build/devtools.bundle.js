@@ -72,7 +72,7 @@ chrome.devtools.panels.create('Dev Tools from chrome-extension-boilerplate-react
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("30eeac2ccf4315bb608c")
+/******/ 		__webpack_require__.h = () => ("49fa0a57099910ba684b")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
