@@ -1,41 +1,6 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
-/******/ 	var __webpack_modules__ = ({
-
-/***/ "./src/pages/Content/index.js":
-/*!************************************!*\
-  !*** ./src/pages/Content/index.js ***!
-  \************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _modules_print__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/print */ "./src/pages/Content/modules/print.js");
-
-
-// console.log('Content script works!');
-// console.log('Must reload extension for modifications to take effect.');
-
-// printLine("Using the 'printLine' function from the Print Module");
-
-/***/ }),
-
-/***/ "./src/pages/Content/modules/print.js":
-/*!********************************************!*\
-  !*** ./src/pages/Content/modules/print.js ***!
-  \********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "printLine": () => (/* binding */ printLine)
-/* harmony export */ });
-var printLine = function printLine(line) {
-  console.log("===> FROM THE PRINT MODULE:", line);
-};
-
-/***/ })
-
-/******/ 	});
+/******/ 	var __webpack_modules__ = ({});
 /************************************************************************/
 /******/ 	// The module cache
 /******/ 	var __webpack_module_cache__ = {};
@@ -80,18 +45,6 @@ var printLine = function printLine(line) {
 /******/ 	__webpack_require__.i = [];
 /******/ 	
 /************************************************************************/
-/******/ 	/* webpack/runtime/define property getters */
-/******/ 	(() => {
-/******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = (exports, definition) => {
-/******/ 			for(var key in definition) {
-/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
-/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
-/******/ 				}
-/******/ 			}
-/******/ 		};
-/******/ 	})();
-/******/ 	
 /******/ 	/* webpack/runtime/get javascript update chunk filename */
 /******/ 	(() => {
 /******/ 		// This function allow to reference all chunks
@@ -108,7 +61,7 @@ var printLine = function printLine(line) {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("49fa0a57099910ba684b")
+/******/ 		__webpack_require__.h = () => ("d2c53d3a7ff7c28e5658")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
@@ -158,17 +111,6 @@ var printLine = function printLine(line) {
 /******/ 			script.onerror = onScriptComplete.bind(null, script.onerror);
 /******/ 			script.onload = onScriptComplete.bind(null, script.onload);
 /******/ 			needAttach && document.head.appendChild(script);
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/make namespace object */
-/******/ 	(() => {
-/******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = (exports) => {
-/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 			}
-/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
 /******/ 	})();
 /******/ 	
@@ -1089,9 +1031,6 @@ var printLine = function printLine(line) {
 /************************************************************************/
 /******/ 	
 /******/ 	// module cache are used so entry inlining is disabled
-/******/ 	// startup
-/******/ 	// Load entry module and return exports
-/******/ 	var __webpack_exports__ = __webpack_require__("./src/pages/Content/index.js");
 /******/ 	
 /******/ })()
 ;

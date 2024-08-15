@@ -1,19 +1,6 @@
 /******/ (() => { // webpackBootstrap
-/******/ 	var __webpack_modules__ = ({
-
-/***/ "./src/pages/Background/index.js":
-/*!***************************************!*\
-  !*** ./src/pages/Background/index.js ***!
-  \***************************************/
-/***/ (() => {
-
-// console.log(
-//   'If we want to interact with other pages from the Nestor extension, we can do so here.'
-// );
-
-/***/ })
-
-/******/ 	});
+/******/ 	"use strict";
+/******/ 	var __webpack_modules__ = ({});
 /************************************************************************/
 /******/ 	// The module cache
 /******/ 	var __webpack_module_cache__ = {};
@@ -74,7 +61,7 @@
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("49fa0a57099910ba684b")
+/******/ 		__webpack_require__.h = () => ("d2c53d3a7ff7c28e5658")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
@@ -1044,9 +1031,6 @@
 /************************************************************************/
 /******/ 	
 /******/ 	// module cache are used so entry inlining is disabled
-/******/ 	// startup
-/******/ 	// Load entry module and return exports
-/******/ 	var __webpack_exports__ = __webpack_require__("./src/pages/Background/index.js");
 /******/ 	
 /******/ })()
 ;

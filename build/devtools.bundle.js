@@ -1,17 +1,6 @@
 /******/ (() => { // webpackBootstrap
-/******/ 	var __webpack_modules__ = ({
-
-/***/ "./src/pages/Devtools/index.js":
-/*!*************************************!*\
-  !*** ./src/pages/Devtools/index.js ***!
-  \*************************************/
-/***/ (() => {
-
-chrome.devtools.panels.create('Dev Tools from chrome-extension-boilerplate-react', 'icon-34.png', 'panel.html');
-
-/***/ })
-
-/******/ 	});
+/******/ 	"use strict";
+/******/ 	var __webpack_modules__ = ({});
 /************************************************************************/
 /******/ 	// The module cache
 /******/ 	var __webpack_module_cache__ = {};
@@ -72,7 +61,7 @@ chrome.devtools.panels.create('Dev Tools from chrome-extension-boilerplate-react
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("49fa0a57099910ba684b")
+/******/ 		__webpack_require__.h = () => ("d2c53d3a7ff7c28e5658")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
@@ -1042,9 +1031,6 @@ chrome.devtools.panels.create('Dev Tools from chrome-extension-boilerplate-react
 /************************************************************************/
 /******/ 	
 /******/ 	// module cache are used so entry inlining is disabled
-/******/ 	// startup
-/******/ 	// Load entry module and return exports
-/******/ 	var __webpack_exports__ = __webpack_require__("./src/pages/Devtools/index.js");
 /******/ 	
 /******/ })()
 ;
